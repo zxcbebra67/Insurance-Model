@@ -3,6 +3,8 @@
 #include <string>
 #include <cstdlib>
 #include <ctime>
+#include <random>
+#include <cmath>
 
 using namespace std;
 
@@ -30,7 +32,22 @@ public:
         franchise_ = franchise;
     }
     double demand() {
-        return double(max_compensation_) / (double(duration_) / (double(fee_period_) * double(fee_))) - 1.0;
+        return double(max_compensation_) / (double(duration_) / (double(fee_period_) * double(fee_)));
+    }
+    void add_customers(int n){
+        customers += n;
+    }
+    int get_customers(){
+        return customers;
+    }
+    void new_customers(std::default_random_engine& gen, int order){
+        double baseProbability = 1.0 / (1.0 + std::exp(-0.1 * demand()));
+        std::normal_distribution<double> dist(1.0, 0.1);
+        double randomFactor = dist(gen);
+        double probability = baseProbability * randomFactor;
+        probability = std::max(0.0, std::min(1.0, probability));
+        std::binomial_distribution<int> binom(order, probability);
+        add_customers(binom(gen));
     }
 protected:
     int fee_;
@@ -38,16 +55,20 @@ protected:
     int duration_;
     int max_compensation_;
     int franchise_;
+    int customers = 0;
 };
 
 class Life : public Insurance {
-
+public:
+    using Insurance::Insurance;
 };
 
 class Estate : public Insurance {
-
+public:
+    using Insurance::Insurance;
 };
 
 class Vehicle : public Insurance {
-
+public:
+    using Insurance::Insurance;
 };
