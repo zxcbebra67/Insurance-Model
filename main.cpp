@@ -3,7 +3,8 @@
 #include <cstdlib>
 #include <ctime>
 #include <cmath>
-#include "Insurance.h"
+#include "CustomersManager.h"
+#include "Insurance.cpp"
 
 using namespace std;
 
@@ -17,9 +18,10 @@ int main() {
 	Vehicle vehicle(1000, 12, 24, 5000, 500);
 	int M = 1;
 	int order = 100;
+	CustomerManager manager;
 	for(int i = 0; i < M; i++){
 		Capital *= 0.91;
-		life.new_customers(gen, order);
+		life.new_customers(gen, order, manager);
 	}
 	cout << life.get_customers();
 }
