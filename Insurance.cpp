@@ -4,10 +4,9 @@
 double probabilityFromDemand(double d) {
     if (d <= 1.0) return 0.0;
 
-    const double k = 1.2;   // крутизна
-    const double c = 3.0;   // точка 50%
+    const double k = 1.2;
+    const double c = 3.0;
 
-    // логистическая функция
     auto logistic = [&](double x) {
         return 1.0 / (1.0 + std::exp(-k * (x - c)));
     };
@@ -19,11 +18,7 @@ double probabilityFromDemand(double d) {
 
 int Insurance::new_customers(int order) {
     double d = demand();
-
-    // базовая вероятность
     double baseProbability = probabilityFromDemand(d);
-
-    // небольшой шум ±10%
     std::uniform_real_distribution<double> noise(-0.1, 0.1);
     double randomFactor = 1.0 + noise(gen);
 

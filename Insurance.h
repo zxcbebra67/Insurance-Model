@@ -55,6 +55,9 @@ public:
     int get_fee_period_(){
         return fee_period_;
     }
+    int get_max_compenstation(){
+        return max_compensation_;
+    }
     int new_customers(int order);
 protected:
     int fee_;
