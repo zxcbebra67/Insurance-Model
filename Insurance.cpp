@@ -1,14 +1,35 @@
 #include "Insurance.h"
 #include "CustomersManager.h"
 
-void Insurance::new_customers(std::default_random_engine& gen, int order, CustomerManager& manager){
-        double baseProbability = 1.0 / (1.0 + std::exp(-0.1 * demand()));
-        std::normal_distribution<double> dist(1.0, 0.1);
-        double randomFactor = dist(gen);
-        double probability = baseProbability * randomFactor;
-        probability = std::max(0.0, std::min(1.0, probability));
-        std::binomial_distribution<int> binom(order, probability);
-        int n = binom(gen);
-        add_customers(n);
-        manager.AddCustomer(duration_, n);
-    }
+double probabilityFromDemand(double d) {
+    if (d <= 1.0) return 0.0;
+
+    const double k = 1.2;   // крутизна
+    const double c = 3.0;   // точка 50%
+
+    // логистическая функция
+    auto logistic = [&](double x) {
+        return 1.0 / (1.0 + std::exp(-k * (x - c)));
+    };
+
+    double minVal = logistic(1.0);
+    double p = (logistic(d) - minVal) / (1.0 - minVal);
+    return std::clamp(p, 0.0, 1.0);
+}
+
+int Insurance::new_customers(int order) {
+    double d = demand();
+
+    // базовая вероятность
+    double baseProbability = probabilityFromDemand(d);
+
+    // небольшой шум ±10%
+    std::uniform_real_distribution<double> noise(-0.1, 0.1);
+    double randomFactor = 1.0 + noise(gen);
+
+    double probability = std::clamp(baseProbability * randomFactor, 0.0, 1.0);
+
+    std::binomial_distribution<int> binom(order, probability);
+    int n = binom(gen);
+    return n;
+}

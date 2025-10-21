@@ -9,19 +9,25 @@
 using namespace std;
 
 int main() {
-	std::default_random_engine gen;
-	std::random_device rd;
 	gen.seed(rd());
-	double Capital = 10000;
+	long long Capital = 10000;
 	Life life(1000, 12, 24, 5000, 500);
 	Estate estate(1000, 12, 24, 5000, 500);
 	Vehicle vehicle(1000, 12, 24, 5000, 500);
-	int M = 1;
-	int order = 100;
-	CustomerManager manager;
-	for(int i = 0; i < M; i++){
+	int M = 5;
+	int order = 1000;
+	CustomerManager manager_life;
+	CustomerManager manager_estate;
+	CustomerManager manager_vehicle;
+	for(int i = 0; i < 24; i++){
 		Capital *= 0.91;
-		life.new_customers(gen, order, manager);
+		int n = life.new_customers(order);
+		life.add_customers(n);
+    	manager_life.AddCustomer(life, n);
+		manager_life.MoneyLender(Capital, life);
+		/* estate.new_customers(gen, order, manager_estate);
+		vehicle.new_customers(gen, order, manager_vehicle);
+		manager_life.MoneyLender(Capital, life); */
 	}
-	cout << life.get_customers();
+	manager_life.PrintQueue();
 }

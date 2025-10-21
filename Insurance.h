@@ -5,8 +5,12 @@
 #include <ctime>
 #include <random>
 #include <cmath>
+#include <algorithm>
 
 using namespace std;
+
+std::default_random_engine gen;
+std::random_device rd;
 
 class CustomerManager;
 
@@ -34,7 +38,7 @@ public:
         franchise_ = franchise;
     }
     double demand() {
-        return double(max_compensation_) / (double(duration_) / (double(fee_period_) * double(fee_)));
+        return double(max_compensation_) / ((double(duration_) / (double(fee_period_)) * double(fee_)));
     }
     void add_customers(int n){
         customers += n;
@@ -42,7 +46,16 @@ public:
     int get_customers(){
         return customers;
     }
-    void new_customers(std::default_random_engine& gen, int order, CustomerManager& manager);
+    int get_duration(){
+        return duration_;
+    }
+    int get_fee(){
+        return fee_;
+    }
+    int get_fee_period_(){
+        return fee_period_;
+    }
+    int new_customers(int order);
 protected:
     int fee_;
     int fee_period_;
