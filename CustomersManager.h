@@ -82,9 +82,13 @@ public:
                 capital+=(cur->conditions.get_fee() * cur->number);
             }
             if(cur->month >= cur->conditions.get_duration()){
-                UpdateInsurance(cur, insurance);
+                Customer* p = cur;
+                cur = cur->next;
+                UpdateInsurance(p, insurance);
+            }
+            else{
+                cur = cur->next;
             };
-            cur = cur->next;
         }
     }
 
