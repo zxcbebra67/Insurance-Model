@@ -37,7 +37,7 @@ public:
     void Set_Franchise(int franchise) {
         franchise_ = franchise;
     }
-    double demand() {
+    double demand() { //функция рассчета спроса, возвращает какое-то число
         return double(max_compensation_) / ((double(duration_) / (double(fee_period_)) * double(fee_)));
     }
     void add_customers(int n){

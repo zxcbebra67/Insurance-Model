@@ -15,8 +15,8 @@ int main() {
 	Estate estate(1000, 12, 24, 5000, 500);
 	Vehicle vehicle(1000, 12, 24, 5000, 500);
 	int M = 5;
-	int order = 1000;
-	double probability = 0.3;
+	int order = 1000; //максимальное число клиентов которые могут прийти за один месяц
+	double probability = 0.3; //максимальная вероятность что произойдет страховой случай
 	CustomerManager manager_life;
 	CustomerManager manager_estate;
 	CustomerManager manager_vehicle;
@@ -26,9 +26,9 @@ int main() {
 		life.add_customers(n);
     	manager_life.AddCustomer(life, n);
 		cout << Capital << '\n';
-		manager_life.MoneyLender(Capital, life);
+		manager_life.MoneyLender(Capital, life); //сбор денег
 		cout << Capital << '\n';
-		manager_life.InsuredLoss(Capital, probability);
+		manager_life.InsuredLoss(Capital, probability); //выплата компенсаций 
 		/* estate.new_customers(gen, order, manager_estate);
 		vehicle.new_customers(gen, order, manager_vehicle);
 		manager_life.MoneyLender(Capital, life); */
