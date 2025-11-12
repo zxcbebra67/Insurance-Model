@@ -10,7 +10,7 @@
 #include <QTableWidget>
 
 class MainWindow : public QMainWindow {
-    Q_OBJECT   // <--- добавь ЭТО
+    Q_OBJECT
 
 public:
     MainWindow(QWidget *parent = nullptr);
@@ -19,6 +19,7 @@ public:
 private slots:
     void onInitClicked();
     void onNextMonthClicked();
+    void onUpdatePoliciesClicked();
 
 private:
     void setupUi();
@@ -26,7 +27,7 @@ private:
 
     Company company_;
 
-    // UI elements
+    // === UI элементы ===
     QLineEdit *initialCapitalEdit_;
     QLineEdit *taxRateEdit_;
     QLineEdit *monthsEdit_;
@@ -49,11 +50,12 @@ private:
     QLineEdit *baseDemandHouseEdit_;
     QLineEdit *baseDemandCarEdit_;
     QLineEdit *baseDemandHealthEdit_;
-
     QLineEdit *trustFactorEdit_;
 
     QPushButton *initButton_;
     QPushButton *nextMonthButton_;
+    QPushButton *updatePoliciesButton_;
+
     QTextEdit *logView_;
     QLabel *capitalLabel_;
     QTableWidget *conditionsTable_;
