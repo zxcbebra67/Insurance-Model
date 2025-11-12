@@ -9,8 +9,8 @@
 
 using namespace std;
 
-std::default_random_engine gen;
-std::random_device rd;
+static std::default_random_engine gen;
+static std::random_device rd;
 
 class CustomerManager;
 
@@ -58,7 +58,14 @@ public:
     int get_max_compenstation(){
         return max_compensation_;
     }
+    int get_franchise(){
+        return franchise_;
+    }
     int new_customers(int order);
+
+    virtual std::string get_type_name() const {
+        return "Basic Insurance";
+    }
 protected:
     int fee_;
     int fee_period_;
@@ -71,14 +78,34 @@ protected:
 class Life : public Insurance {
 public:
     using Insurance::Insurance;
+
+    std::string get_type_name() const override {
+        return "Life Insurance";
+    }
 };
 
 class Estate : public Insurance {
 public:
     using Insurance::Insurance;
+
+    std::string get_type_name() const override {
+        return "Estate Insurance";
+    }
 };
 
 class Vehicle : public Insurance {
 public:
     using Insurance::Insurance;
+
+    std::string get_type_name() const override {
+        return "Vehicle Insurance";
+    }
 };
+
+inline double probabilityFromDemand(double d) {
+    if(d <= 4){
+        return max(0.0, (d-3)/3);
+    }
+    else if (d <= 10) return (d-4)/15 + 1.0/3.0;
+    else return min((d-10)/20 + 11.0/15.0, 1.0);
+}

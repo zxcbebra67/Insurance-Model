@@ -1,0 +1,3 @@
+C:/Users/ASUS/source/Insurance-Model/build/CMakeFiles/InsuranceServer.dir
+C:/Users/ASUS/source/Insurance-Model/build/CMakeFiles/edit_cache.dir
+C:/Users/ASUS/source/Insurance-Model/build/CMakeFiles/rebuild_cache.dir

@@ -1,0 +1,3 @@
+C:\Users\ASUS\Downloads\winlibs-x86_64-posix-seh-gcc-15.2.0-mingw-w64ucrt-13.0.0-r2\mingw64\bin\cmake.exe -E rm -f CMakeFiles\InsuranceServer.dir/objects.a
+C:\Users\ASUS\Downloads\winlibs-x86_64-posix-seh-gcc-15.2.0-mingw-w64ucrt-13.0.0-r2\mingw64\bin\ar.exe qc CMakeFiles\InsuranceServer.dir/objects.a @CMakeFiles\InsuranceServer.dir\objects1.rsp
+c:\Users\ASUS\Downloads\winlibs-x86_64-posix-seh-gcc-15.2.0-mingw-w64ucrt-13.0.0-r2\mingw64\bin\g++.exe -g -Wl,--whole-archive CMakeFiles\InsuranceServer.dir/objects.a -Wl,--no-whole-archive -o InsuranceServer.exe -Wl,--out-implib,libInsuranceServer.dll.a -Wl,--major-image-version,0,--minor-image-version,0 @CMakeFiles\InsuranceServer.dir\linkLibs.rsp

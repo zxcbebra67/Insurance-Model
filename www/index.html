@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Insurance Company</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div class="header-content">
+                <h1>Insurance Company Management</h1>
+                <div class="header-stats">
+                    <div class="capital-display">
+                        Capital: <span id="capital-value">10,000,000</span> RUB
+                        <button class="btn-primary" id="change-capital-btn">Change</button>
+                    </div>
+                    <div class="probability-display">
+                        Probability: <span id="probability-value">5.0</span>%
+                        <button class="btn-primary" id="change-probability-btn">Change</button>
+                    </div>
+                    <div class="order-display">
+                        New Clients/Month: <span id="order-value">100</span>
+                        <button class="btn-primary" id="change-order-btn">Change</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+    
+    <div class="container">
+        <div class="tabs">
+            <div class="tab active" data-tab="insurance">Insurance Products</div>
+            <div class="tab" data-tab="stats">Statistics</div>
+            <div class="tab" data-tab="simulation">Simulation</div>
+        </div>
+        
+        <div class="tab-content active" id="insurance-tab">
+            <h2>Insurance Products</h2>
+            <div class="controls">
+                <button class="btn-primary" id="add-insurance-btn">Add Insurance Product</button>
+                <button class="btn-success" id="simulate-month-btn">Simulate Month</button>
+            </div>
+            
+            <div class="insurance-cards" id="insurance-cards-container">
+                <!-- Cards will be loaded by JavaScript -->
+            </div>
+        </div>
+        
+        <div class="tab-content" id="stats-tab">
+            <h2>Statistics</h2>
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-label">Total Customers</div>
+                    <div class="stat-value" id="total-customers">0</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">Current Month</div>
+                    <div class="stat-value" id="current-month">0</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">Insurance Products</div>
+                    <div class="stat-value" id="total-products">0</div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="tab-content" id="simulation-tab">
+            <h2>Simulation Controls</h2>
+            <div class="controls">
+                <button class="btn-primary" id="start-simulation-btn">Start Simulation</button>
+                <button class="btn-danger" id="stop-simulation-btn" disabled>Stop Simulation</button>
+                <button class="btn-success" id="reset-simulation-btn">Reset Simulation</button>
+            </div>
+            
+            <div class="simulation-log" id="simulation-log">
+                <!-- Log messages will appear here -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Modals -->
+    <div class="modal" id="insurance-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="modal-title">Add Insurance Product</h3>
+                <button class="close-modal">&times;</button>
+            </div>
+            <form id="insurance-form">
+                <div class="form-group">
+                    <label for="insurance-type">Type:</label>
+                    <select id="insurance-type" required>
+                        <option value="life">Life Insurance</option>
+                        <option value="estate">Estate Insurance</option>
+                        <option value="vehicle">Vehicle Insurance</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="insurance-fee">Fee (RUB):</label>
+                    <input type="number" id="insurance-fee" min="100" max="100000" value="5000" required>
+                </div>
+                <div class="form-group">
+                    <label for="insurance-fee-period">Fee Period (months):</label>
+                    <input type="number" id="insurance-fee-period" min="1" max="12" value="1" required>
+                </div>
+                <div class="form-group">
+                    <label for="insurance-duration">Duration (months):</label>
+                    <input type="number" id="insurance-duration" min="1" max="120" value="12" required>
+                </div>
+                <div class="form-group">
+                    <label for="insurance-max-compensation">Max Compensation (RUB):</label>
+                    <input type="number" id="insurance-max-compensation" min="1000" max="10000000" value="1000000" required>
+                </div>
+                <div class="form-group">
+                    <label for="insurance-franchise">Franchise (RUB):</label>
+                    <input type="number" id="insurance-franchise" min="0" max="100000" value="0">
+                </div>
+                <div class="controls">
+                    <button type="button" class="btn-danger close-modal">Cancel</button>
+                    <button type="submit" class="btn-primary">Add Insurance</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div class="modal" id="capital-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Change Capital</h3>
+                <button class="close-modal">&times;</button>
+            </div>
+            <form id="capital-form">
+                <div class="form-group">
+                    <label for="new-capital">New Capital (RUB):</label>
+                    <input type="number" id="new-capital" min="1000000" max="1000000000" value="10000000" required>
+                </div>
+                <div class="controls">
+                    <button type="button" class="btn-danger close-modal">Cancel</button>
+                    <button type="submit" class="btn-primary">Set Capital</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div class="modal" id="probability-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Set Probability</h3>
+                <button class="close-modal">&times;</button>
+            </div>
+            <form id="probability-form">
+                <div class="form-group">
+                    <label for="new-probability">Probability of Insurance Cases (%):</label>
+                    <input type="number" id="new-probability" min="0" max="100" step="0.1" value="5.0" required>
+                </div>
+                <div class="controls">
+                    <button type="button" class="btn-danger close-modal">Cancel</button>
+                    <button type="submit" class="btn-primary">Set Probability</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div class="modal" id="order-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Set New Clients per Month</h3>
+                <button class="close-modal">&times;</button>
+            </div>
+            <form id="order-form">
+                <div class="form-group">
+                    <label for="new-order">Number of new clients each month:</label>
+                    <input type="number" id="new-order" min="0" max="10000" value="100" required>
+                </div>
+                <div class="controls">
+                    <button type="button" class="btn-danger close-modal">Cancel</button>
+                    <button type="submit" class="btn-primary">Set Clients</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

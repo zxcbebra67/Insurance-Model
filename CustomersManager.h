@@ -98,16 +98,12 @@ public:
     }
 
     void InsuredLoss(long long& capital, double p_max ){
-        int calculateClaims(std::default_random_engine& gen, int n, double p_max);
-
         std::uniform_real_distribution<double> probDist(0.0, p_max);
         double p = probDist(gen);
-
         Customer* cur = head;
         while (cur) {
             std::binomial_distribution<int> claimDist(cur->number, p);
             int claims = claimDist(gen);
-            cout << cur->number << " " << claims << '\n'; 
             capital -= CalculateLoss(claims, cur);
             cur = cur->next;
         }
@@ -118,7 +114,20 @@ public:
         for(int i = 0; i < n; i++){
             std::uniform_real_distribution<double> dist(0.0, 1.0);
             double x = dist(gen);
-            loss += cur->conditions.get_max_compenstation() * x;
+            double y;
+            if(x < 0.5){
+                std::uniform_real_distribution<double> dist1(0.0, 0.15);
+                y = dist1(gen);
+            }
+            else if(x < 0.9){
+                std::uniform_real_distribution<double> dist1(0.15, 0.5);
+                y = dist1(gen);
+            }
+            else {
+                std::uniform_real_distribution<double> dist1(0.5, 1.0);
+                y = dist1(gen);
+            }
+            loss += cur->conditions.get_max_compenstation() * y;
         }
         return loss;
     }

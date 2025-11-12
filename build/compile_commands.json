@@ -1,0 +1,14 @@
+[
+{
+  "directory": "C:/Users/ASUS/source/Insurance-Model/build",
+  "command": "c:\\Users\\ASUS\\Downloads\\winlibs-x86_64-posix-seh-gcc-15.2.0-mingw-w64ucrt-13.0.0-r2\\mingw64\\bin\\g++.exe   -g -std=gnu++17 -o CMakeFiles\\InsuranceServer.dir\\server.cpp.obj -c C:\\Users\\ASUS\\source\\Insurance-Model\\server.cpp",
+  "file": "C:/Users/ASUS/source/Insurance-Model/server.cpp",
+  "output": "CMakeFiles/InsuranceServer.dir/server.cpp.obj"
+},
+{
+  "directory": "C:/Users/ASUS/source/Insurance-Model/build",
+  "command": "c:\\Users\\ASUS\\Downloads\\winlibs-x86_64-posix-seh-gcc-15.2.0-mingw-w64ucrt-13.0.0-r2\\mingw64\\bin\\g++.exe   -g -std=gnu++17 -o CMakeFiles\\InsuranceServer.dir\\Insurance.cpp.obj -c C:\\Users\\ASUS\\source\\Insurance-Model\\Insurance.cpp",
+  "file": "C:/Users/ASUS/source/Insurance-Model/Insurance.cpp",
+  "output": "CMakeFiles/InsuranceServer.dir/Insurance.cpp.obj"
+}
+]
