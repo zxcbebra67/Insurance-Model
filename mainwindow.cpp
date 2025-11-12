@@ -96,9 +96,14 @@ void MainWindow::setupUi() {
     QHBoxLayout *buttonsLay = new QHBoxLayout();
     initButton_ = new QPushButton("Инициализировать симуляцию");
     nextMonthButton_ = new QPushButton("Следующий месяц");
+    updatePoliciesButton_ = new QPushButton("Обновить условия полисов"); // ✅ новая кнопка
+
     nextMonthButton_->setEnabled(false);
+    updatePoliciesButton_->setEnabled(false);
+
     buttonsLay->addWidget(initButton_);
     buttonsLay->addWidget(nextMonthButton_);
+    buttonsLay->addWidget(updatePoliciesButton_);
 
     // === СТАТУС ===
     QHBoxLayout *statusLay = new QHBoxLayout();
@@ -120,11 +125,12 @@ void MainWindow::setupUi() {
 
     connect(initButton_, &QPushButton::clicked, this, &MainWindow::onInitClicked);
     connect(nextMonthButton_, &QPushButton::clicked, this, &MainWindow::onNextMonthClicked);
+    connect(updatePoliciesButton_, &QPushButton::clicked, this, &MainWindow::onUpdatePoliciesClicked);
 
     resize(900, 700);
     setWindowTitle("Модель страховой компании");
 
-    // === Устанавливаем валидаторы ===
+    // === Валидаторы ===
     auto *doubleVal = new QDoubleValidator(0, 1e9, 6, this);
     auto *intVal = new QIntValidator(1, 1000000, this);
 
@@ -146,7 +152,6 @@ void MainWindow::setupUi() {
 }
 
 void MainWindow::onInitClicked() {
-    // === Проверяем корректность ввода ===
     QList<QLineEdit*> allFields = {
         initialCapitalEdit_, taxRateEdit_, monthsEdit_,
         housePremiumEdit_, houseDurationEdit_, houseMaxCompEdit_, houseFranchiseEdit_,
@@ -158,14 +163,11 @@ void MainWindow::onInitClicked() {
 
     for (auto *e : allFields) {
         if (e->text().isEmpty() || !e->hasAcceptableInput()) {
-            QMessageBox::warning(this, "Неправильный ввод",
-                                 QString("Проверьте поле: \"%1\" — требуется числовое значение.")
-                                 .arg(e->placeholderText().isEmpty() ? e->text() : e->placeholderText()));
+            QMessageBox::warning(this, "Неправильный ввод", "Проверьте введённые значения (только числа).");
             return;
         }
     }
 
-    // === Получаем значения ===
     double initialCapital = initialCapitalEdit_->text().toDouble();
     double taxRate = taxRateEdit_->text().toDouble();
     int months = monthsEdit_->text().toInt();
@@ -190,7 +192,6 @@ void MainWindow::onInitClicked() {
     int baseHe = baseDemandHealthEdit_->text().toInt();
     double trust = trustFactorEdit_->text().toDouble();
 
-    // === Инициализация симуляции ===
     company_ = Company(initialCapital, taxRate);
     company_.setBaseDemandHouse(baseH);
     company_.setBaseDemandCar(baseC);
@@ -202,10 +203,11 @@ void MainWindow::onInitClicked() {
 
     company_.initSimulation(months, static_cast<std::uint32_t>(std::random_device{}()));
     logView_->clear();
-    logView_->append(QString("Симуляция инициализирована. Начальный капитал: %1, месяцев: %2")
-                     .arg(initialCapital).arg(months));
+    logView_->append(QString("Симуляция инициализирована. Начальный капитал: %1, месяцев: %2").arg(initialCapital).arg(months));
     updateStatus();
+
     nextMonthButton_->setEnabled(true);
+    updatePoliciesButton_->setEnabled(true); // ✅ включаем возможность обновления
 }
 
 void MainWindow::onNextMonthClicked() {
@@ -219,7 +221,36 @@ void MainWindow::onNextMonthClicked() {
     updateStatus();
     if (company_.isBankrupt() || company_.currentMonth() >= company_.monthsTotal()) {
         nextMonthButton_->setEnabled(false);
+        updatePoliciesButton_->setEnabled(false);
     }
+}
+
+void MainWindow::onUpdatePoliciesClicked() {
+    if (company_.isBankrupt()) {
+        QMessageBox::warning(this, "Ошибка", "Компания банкрот, обновление невозможно.");
+        return;
+    }
+
+    double hPremium = housePremiumEdit_->text().toDouble();
+    int hDuration = houseDurationEdit_->text().toInt();
+    double hMax = houseMaxCompEdit_->text().toDouble();
+    double hFran = houseFranchiseEdit_->text().toDouble();
+
+    double cPremium = carPremiumEdit_->text().toDouble();
+    int cDuration = carDurationEdit_->text().toInt();
+    double cMax = carMaxCompEdit_->text().toDouble();
+    double cFran = carFranchiseEdit_->text().toDouble();
+
+    double hePremium = healthPremiumEdit_->text().toDouble();
+    int heDuration = healthDurationEdit_->text().toInt();
+    double heMax = healthMaxCompEdit_->text().toDouble();
+    double heFran = healthFranchiseEdit_->text().toDouble();
+
+    company_.setHouseTemplate(makeHousePolicy(hPremium, hDuration, hMax, hFran));
+    company_.setCarTemplate(makeCarPolicy(cPremium, cDuration, cMax, cFran));
+    company_.setHealthTemplate(makeHealthPolicy(hePremium, heDuration, heMax, heFran));
+
+    logView_->append("✅ Условия страховых продуктов обновлены. Новые полисы будут продаваться по обновлённым тарифам.");
 }
 
 void MainWindow::updateStatus() {
