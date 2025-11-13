@@ -132,6 +132,7 @@ void MainWindow::setupUi() {
 
     // === Валидаторы ===
     auto *doubleVal = new QDoubleValidator(0, 1e9, 6, this);
+    doubleVal->setLocale(QLocale::English);
     auto *intVal = new QIntValidator(1, 1000000, this);
 
     QList<QLineEdit*> doubles = {
