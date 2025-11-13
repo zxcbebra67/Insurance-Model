@@ -52,7 +52,7 @@ int Company::simulateClaimsNumber(int minCases, int maxCases) {
 
 void Company::payTaxes(double profit) {
     if (profit <= 0) return;
-    double tax = profit * taxRate_;
+    double tax = profit * (taxRate_ / 100.00);
     capital_ -= tax;
 }
 
@@ -172,7 +172,7 @@ QString Company::simulateNextMonth() {
     payTaxes(profit);
     log += QString("Прибыль за месяц: %1\n").arg(profit, 0, 'f', 2);
     if (profit > 0)
-        log += QString("Уплачено налогов: %1\n").arg(profit * taxRate_, 0, 'f', 2);
+        log += QString("Уплачено налогов: %1\n").arg(profit * (taxRate_ / 100.00), 0, 'f', 2);
     else
         log += "Убыток, налог не уплачен.\n";
 
